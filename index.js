@@ -55,7 +55,10 @@ const isDirectory = (userPath) => {
 };
 // Transforma ruta relativa a absoluta
 const transformAbsoluteLink = (route) => {
-  console.log(transformAbsoluteLink);
+  console.log(
+    "Transformando ruta relativa a absoluta".magentaBright,
+    transformAbsoluteLink
+  );
   if (path.isAbsolute(route) === false) {
     return path.resolve(route);
   }
@@ -80,7 +83,7 @@ const readFilesMd = (route) => {
       }
       console.log("Se encontraron los archivos: ".bgGreenBright);
       files.forEach((file) => {
-        if (extCheck(route) === true) {
+        if (extensionValidate(route) === true) {
           console.log(file);
           arrayFiles.push(route);
         }
@@ -90,3 +93,74 @@ const readFilesMd = (route) => {
     });
   });
 };
+
+// para contar links unicos
+const countUniqueLinks = (ruta) => {
+  console.log(countUniqueLinks);
+  let countLinks = 0;
+  ruta.forEach((link, i) => {
+    if (ruta.indexOf(link) === i) {
+      countLinks++;
+    }
+  });
+  return countLinks;
+};
+//Valida los links
+const validateLinks = (ruta) => {
+  console.log(validateLinks);
+  return ruta.map((url) => {
+    return new Promise((resolve) => {
+      https.get(url, (resp) => {
+        if (resp.statusCode === 200) {
+          resolve({
+            ruta: process.argv[2],
+            url: url,
+            code: res.statusCode,
+            message: "OK",
+          });
+        } else {
+          resolve({
+            ruta: process.argv[2],
+            url: url,
+            code: res.statusCode,
+            message: "FAIL",
+          });
+        }
+      });
+    });
+  });
+};
+
+// Funcion extraer info de links
+const infoLinks = (links) => {
+  console.log(infoLinks);
+  const getStatus = links.map((obj) => {
+    return fetch(obj)
+      .then((response) => {
+        return {
+          text: obj.text,
+          href: obj.href,
+          status: response.status === 200 ? "OK" : "Error",
+          ok: "ok",
+        };
+      })
+      .catch((error) => {
+        return {
+          text: obj.text,
+          href: obj.href,
+          status:
+            error.status === undefined ? "No existe status" : error.status,
+          ok: "fail",
+        };
+      });
+  });
+  return Promise.all(getStatus);
+};
+
+/*mdLinks()
+  .then((resolve) => {
+    console.log(resolve);
+  })
+  .catch((error) => {
+    console.log(error.message);
+  });*/
