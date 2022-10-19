@@ -2,9 +2,9 @@
   "name": "md-links",
   "version": "0.1.0",
   "description": "Analizar archivo/archivos .md buscando enlaces para validar",
-  "main": "index.js",
+  "main": "./index.js",
   "bin": {
-    "mdLinks": "index.js"
+    "mdlinks": "./mdLinks.js"
   },
   "engines": {
     "node": ">=16.x"
@@ -12,7 +12,8 @@
   "dependencies": {
     "chalk": "^5.1.2",
     "colors": "^1.4.0",
-    "node-fetch": "^3.2.10"
+    "node-fetch": "^3.2.10",
+    "promise": "^8.2.0"
   },
   "environment": "module",
   "type": "module"

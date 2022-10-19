@@ -5,20 +5,10 @@ import fs from "fs"; // Trabaja sistema de archivos en la computadora
 import path from "path"; // Maneja rutas
 import fetch from "node-fetch";
 import chalk from "chalk";
-import colors from "colors";
+import promise from "promise";
 
 console.log(chalk.blue("Hello world!"));
 console.log("OMG Rainbows!".rainbow); // rainbow
-
-// Constantes expresiones regulares
-// url y texto
-const regExLinkTextUrl =
-  /\[(.+)\]\((https?:\/\/[^\s]+)(?: "(.+)")?\)|(https?:\/\/[^\s]+)/gi;
-// solo text
-const regExText = /\[([^\]]+)]/g;
-// solo url
-const regExUrl =
-  /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/gim;
 
 // Si la ruta existe
 const pathExists = () => {
@@ -38,7 +28,7 @@ const pathIsAbsolute = (route) => {
 // si es un archivo
 const isFile = (route) => {
   console.log(isFile);
-  if (route.isFile() === true) {
+  if (fs.statSync(route).isFile() === true) {
     return true;
   }
   return false;
@@ -65,12 +55,15 @@ const transformAbsoluteLink = (route) => {
   return route;
 };
 // si la extensión del archivo es .md
-const extensionValidate = (routeExt, validExt) => {
+const extensionValidate = (route) => {
   console.log(extensionValidate);
-  if (routeExt === validExt) {
+  if (path.extname(route) === ".md") {
     return true;
+  } else {
+    //si la extension no es .md retorna false
+
+    return false;
   }
-  return false;
 };
 // lee archivos .md
 const readFilesMd = (route) => {
@@ -105,7 +98,7 @@ const countUniqueLinks = (ruta) => {
   });
   return countLinks;
 };
-//Valida los links
+// Valida los links
 const validateLinks = (ruta) => {
   console.log(validateLinks);
   return ruta.map((url) => {
@@ -115,14 +108,14 @@ const validateLinks = (ruta) => {
           resolve({
             ruta: process.argv[2],
             url: url,
-            code: res.statusCode,
+            code: resp.statusCode,
             message: "OK",
           });
         } else {
           resolve({
             ruta: process.argv[2],
             url: url,
-            code: res.statusCode,
+            code: resp.statusCode,
             message: "FAIL",
           });
         }
@@ -157,10 +150,68 @@ const infoLinks = (links) => {
   return Promise.all(getStatus);
 };
 
-/*mdLinks()
+// ruta del usuario
+const inputRuta = process.argv[2];
+// const inputToString = inputRuta.toString();
+
+// ruta del usuario absoluta
+const absoluteUser = transformAbsoluteLink(inputRuta);
+console.log(absoluteUser + "holi");
+
+// const extractFile = readFilesMd(absoluteUser);
+// console.log(extractFile + "analisis");
+
+// extraccion de urls
+const findUrl = (mdFiles) => {
+  return new promise((resolve, reject) => {
+    const urlArray = [];
+    const urlRegex =
+      /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/gim;
+    fs.readFile(mdFiles, "utf-8", (err, data) => {
+      if (err) {
+        reject(err);
+      } else if (data.match(urlRegex) === null) {
+        reject("No se encuentran links en el documento");
+      } else if (data) {
+        data.match(urlRegex).forEach((link) => {
+          urlArray.push(link);
+          //console.log(link);
+        });
+        resolve(urlArray);
+      }
+    });
+  });
+};
+// la promesa
+const mdLinks = (source, options) => {
+  return new promise((resolve, reject) => {
+    if (absoluteUser) {
+      if (isFile(absoluteUser) === true) {
+        if (extensionValidate(absoluteUser) === false) {
+          reject("El archivo no es de tipo .m");
+        } else {
+          findUrl(absoluteUser).then((url) => {
+            url.forEach((link) => {
+              urlArray.push(link);
+              //console.log(link);
+            });
+            console.log(urlArray);
+            resolve(urlArray);
+          });
+
+          // si es true lee el archivo
+          // si es md
+        }
+      }
+    }
+  });
+};
+mdLinks()
   .then((resolve) => {
     console.log(resolve);
   })
   .catch((error) => {
     console.log(error.message);
-  });*/
+  });
+
+// export { transformAbsoluteLink };
