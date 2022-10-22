@@ -4,7 +4,7 @@
   "description": "Analizar archivo/archivos .md buscando enlaces para validar",
   "main": "./index.js",
   "bin": {
-    "mdlinks": "./mdLinks.js"
+    "mdlinks": "./index.js"
   },
   "engines": {
     "node": ">=16.x"

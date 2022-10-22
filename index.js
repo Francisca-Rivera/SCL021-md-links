@@ -5,6 +5,7 @@ import fs from "fs"; // Trabaja sistema de archivos en la computadora
 import path from "path"; // Maneja rutas
 import fetch from "node-fetch";
 import chalk from "chalk";
+import colors from "colors";
 import promise from "promise";
 
 console.log(chalk.blue("Hello world!"));
@@ -45,22 +46,23 @@ const isDirectory = (userPath) => {
 };
 // Transforma ruta relativa a absoluta
 const transformAbsoluteLink = (route) => {
-  console.log(
+  /*console.log(
     "Transformando ruta relativa a absoluta".magentaBright,
     transformAbsoluteLink
-  );
+  );*/
   if (path.isAbsolute(route) === false) {
     return path.resolve(route);
   }
   return route;
 };
+
 // si la extensión del archivo es .md
 const extensionValidate = (route) => {
   console.log(extensionValidate);
   if (path.extname(route) === ".md") {
     return true;
   } else {
-    //si la extension no es .md retorna false
+    // si la extension no es .md retorna false
 
     return false;
   }
@@ -156,7 +158,7 @@ const inputRuta = process.argv[2];
 
 // ruta del usuario absoluta
 const absoluteUser = transformAbsoluteLink(inputRuta);
-console.log(absoluteUser + "holi");
+console.log(absoluteUser + " La ruta es Absoluta!".rainbow);
 
 // const extractFile = readFilesMd(absoluteUser);
 // console.log(extractFile + "analisis");
@@ -175,7 +177,7 @@ const findUrl = (mdFiles) => {
       } else if (data) {
         data.match(urlRegex).forEach((link) => {
           urlArray.push(link);
-          //console.log(link);
+          // console.log(link);
         });
         resolve(urlArray);
       }
@@ -187,19 +189,20 @@ const mdLinks = (source, options) => {
   return new promise((resolve, reject) => {
     if (absoluteUser) {
       if (isFile(absoluteUser) === true) {
+        // si no es md
         if (extensionValidate(absoluteUser) === false) {
-          reject("El archivo no es de tipo .m");
+          reject("El archivo no es de tipo .m".red);
         } else {
           findUrl(absoluteUser).then((url) => {
             url.forEach((link) => {
               urlArray.push(link);
-              //console.log(link);
+              // console.log(link);
             });
             console.log(urlArray);
             resolve(urlArray);
           });
-
           // si es true lee el archivo
+
           // si es md
         }
       }
@@ -213,5 +216,3 @@ mdLinks()
   .catch((error) => {
     console.log(error.message);
   });
-
-// export { transformAbsoluteLink };
