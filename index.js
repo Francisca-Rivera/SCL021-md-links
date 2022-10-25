@@ -9,7 +9,7 @@ import colors from "colors";
 import promise from "promise";
 
 console.log(chalk.blue("Hello world!"));
-console.log("OMG Rainbows!".rainbow); // rainbow
+console.log("OMG Rainbows!".rainbow);
 
 // Si la ruta existe
 const pathExists = () => {
@@ -28,7 +28,6 @@ const pathIsAbsolute = (route) => {
 };
 // si es un archivo
 const isFile = (route) => {
-  console.log(isFile);
   if (fs.statSync(route).isFile() === true) {
     return true;
   }
@@ -63,7 +62,6 @@ const extensionValidate = (route) => {
     return true;
   } else {
     // si la extension no es .md retorna false
-
     return false;
   }
 };
@@ -104,7 +102,7 @@ const countUniqueLinks = (ruta) => {
 const validateLinks = (ruta) => {
   console.log(validateLinks);
   return ruta.map((url) => {
-    return new Promise((resolve) => {
+    return new promise((resolve) => {
       https.get(url, (resp) => {
         if (resp.statusCode === 200) {
           resolve({
@@ -149,7 +147,7 @@ const infoLinks = (links) => {
         };
       });
   });
-  return Promise.all(getStatus);
+  return promise.all(getStatus);
 };
 
 // ruta del usuario

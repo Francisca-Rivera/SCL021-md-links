@@ -1,5 +1,5 @@
 {
-  "name": "md-links",
+  "name": "md-links-franda",
   "version": "0.1.0",
   "description": "Analizar archivo/archivos .md buscando enlaces para validar",
   "main": "./index.js",
