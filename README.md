@@ -28,6 +28,6 @@ Para instalar la librería:
 
 ## 4. Ejemplos de uso
 
-Una vez instalada la librería, puedes ejecutarla con el comando 'mdlinks' en tu terminal, agregando también la ruta de tu archivo, para verificar si es absolta:
+Una vez instalada la librería, puedes ejecutarla con el comando 'mdlinks' en tu terminal, agregando también la ruta de tu archivo, para verificar si es absulta:
 
 ![example1](./ruta-absoluta.png)
